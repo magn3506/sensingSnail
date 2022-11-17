@@ -32,75 +32,119 @@
 // as the current DHT reading algorithm adjusts itself to work on faster procs.
 DHT dht(DHTPIN, DHTTYPE);
 
-int buzzerPin = 10; 
+// CONFIG 
+
+// VIBRAITON DIGITAL PORTS
+int motor1 = 9;
+int motor2 = 8;
+int motor3 = 7;
+int motor4 = 6;
 
 void setup() {
   Serial.begin(9600);
-  Serial.println(F("DHTxx test!"));
+  Serial.print("setup");
+  // Serial.println(F("DHTxx test!"));
 
-  pinMode(8, OUTPUT);
-  pinMode(7, OUTPUT);
-  pinMode(6, OUTPUT);
-  pinMode(buzzerPin, OUTPUT); // Set buzzer - pin 9 as an output
 
-  dht.begin();
+  pinMode(motor1, OUTPUT);
+  pinMode(motor2, OUTPUT);
+  pinMode(motor3, OUTPUT);
+  pinMode(motor4, OUTPUT);
+
+  // dht.begin();
+}
+
+void vibrationSeq1(int delayBetweenVibraiton, int delayBefore) {
+
+    delay(delayBefore);
+    digitalWrite(motor1, HIGH);
+    digitalWrite(motor2, LOW);
+    digitalWrite(motor3, LOW);
+    digitalWrite(motor4, LOW);
+    delay(delayBetweenVibraiton);    
+    digitalWrite(motor1, LOW);
+    digitalWrite(motor2, HIGH);
+    digitalWrite(motor3, LOW);
+    digitalWrite(motor4, LOW);
+    delay(delayBetweenVibraiton);
+    digitalWrite(motor1, LOW);
+    digitalWrite(motor2, LOW);
+    digitalWrite(motor3, HIGH);
+    digitalWrite(motor4, LOW);
+    delay(delayBetweenVibraiton);
+    digitalWrite(motor1, LOW);
+    digitalWrite(motor2, LOW);
+    digitalWrite(motor3, LOW);
+    digitalWrite(motor4, HIGH);
+    delay(delayBetweenVibraiton);
+    digitalWrite(motor1, LOW);
+    digitalWrite(motor2, LOW);
+    digitalWrite(motor3, LOW);
+    digitalWrite(motor4, LOW);
 }
 
 void loop() {
-  // Wait a few seconds between measurements.
+    Serial.print("loop");
 
-  // Reading temperature or humidity takes about 250 milliseconds!
-  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-  float h = dht.readHumidity();
-  // Read temperature as Celsius (the default)
-  float t = dht.readTemperature();
-  // Read temperature as Fahrenheit (isFahrenheit = true)
-  float f = dht.readTemperature(true);
+    vibrationSeq1(50, 500);
 
-  // Check if any reads failed and exit early (to try again).
-  if (isnan(h) || isnan(t) || isnan(f)) {
-    Serial.println(F("Failed to read from DHT sensor!"));
-    return;
-  }
 
-  // Compute heat index in Fahrenheit (the default)
-  float hif = dht.computeHeatIndex(f, h);
-  // Compute heat index in Celsius (isFahreheit = false)
-  float hic = dht.computeHeatIndex(t, h, false);
 
-  if(h < 75.00) {
-     digitalWrite(8, LOW);
-     digitalWrite(7, LOW);
-     digitalWrite(6, LOW);
-     tone(buzzerPin, 1000);
-     delay(500);
-     noTone(buzzerPin);
-  }
 
-  if(h > 75.00 && h < 85.00){
-     digitalWrite(8, HIGH);
-     digitalWrite(7, LOW);
-     digitalWrite(6, LOW);
-     tone(buzzerPin, 600);
-     delay(500);
-     noTone(buzzerPin);
-  }
+  // // Wait a few seconds between measurements.
 
-  if(h > 85.00 && h < 95.00){
-     digitalWrite(8, LOW);
-     digitalWrite(7, HIGH);
-     digitalWrite(6, LOW);
-     tone(buzzerPin, 400);
-     delay(500);
-     noTone(buzzerPin);
-  }
+  // // Reading temperature or humidity takes about 250 milliseconds!
+  // // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
+  // float h = dht.readHumidity();
+  // // Read temperature as Celsius (the default)
+  // float t = dht.readTemperature();
+  // // Read temperature as Fahrenheit (isFahrenheit = true)
+  // float f = dht.readTemperature(true);
 
-  if(h > 90.00){
-     digitalWrite(8, LOW);
-     digitalWrite(7, LOW);
-     tone(buzzerPin, 100);
-     delay(500);
-     noTone(buzzerPin);
-  }
+  // // Check if any reads failed and exit early (to try again).
+  // if (isnan(h) || isnan(t) || isnan(f)) {
+  //   Serial.println(F("Failed to read from DHT sensor!"));
+  //   return;
+  // }
+
+  // // Compute heat index in Fahrenheit (the default)
+  // float hif = dht.computeHeatIndex(f, h);
+  // // Compute heat index in Celsius (isFahreheit = false)
+  // float hic = dht.computeHeatIndex(t, h, false);
+
+  // if(h < 75.00) {
+  //    digitalWrite(8, LOW);
+  //    digitalWrite(7, LOW);
+  //    digitalWrite(6, LOW);
+  //    tone(buzzerPin, 1000);
+  //    delay(500);
+  //    noTone(buzzerPin);
+  // }
+
+  // if(h > 75.00 && h < 85.00){
+  //    digitalWrite(8, HIGH);
+  //    digitalWrite(7, LOW);
+  //    digitalWrite(6, LOW);
+  //    tone(buzzerPin, 600);
+  //    delay(500);
+  //    noTone(buzzerPin);
+  // }
+
+  // if(h > 85.00 && h < 95.00){
+  //    digitalWrite(8, LOW);
+  //    digitalWrite(7, HIGH);
+  //    digitalWrite(6, LOW);
+  //    tone(buzzerPin, 400);
+  //    delay(500);
+  //    noTone(buzzerPin);
+  // }
+
+  // if(h > 90.00){
+  //    digitalWrite(8, LOW);
+  //    digitalWrite(7, LOW);
+  //    tone(buzzerPin, 100);
+  //    delay(500);
+  //    noTone(buzzerPin);
+  // }
 
 }
